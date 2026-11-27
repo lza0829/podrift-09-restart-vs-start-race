@@ -140,7 +140,13 @@ th { color: var(--muted); font-weight: 600; font-size: 0.75rem; letter-spacing: 
   transition: background 0.2s, color 0.2s;
 }
 .btn:hover { background: var(--yellow); color: #12151a; }
+.btn.btn-on { background: var(--yellow); color: #12151a; }
 .btn + .btn { margin-left: 0.4rem; }
+
+.hint { color: var(--muted); font-size: 0.82rem; margin-top: 0.6rem; }
+.pod-actions { display: inline-flex; align-items: center; gap: 0.35rem; margin-right: 1.2rem; }
+.dispute { margin: 0.15rem 0; white-space: nowrap; }
+.panel h3 { margin: 0 0 0.6rem; font-size: 1rem; color: var(--ink); }
 
 .tag {
   display: inline-block;

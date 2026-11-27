@@ -48,6 +48,14 @@ def seed_if_empty() -> None:
         ("probe_fail_threshold", "3"),
     )
     conn.execute(
+        "INSERT INTO settings(key, value) VALUES (?,?)",
+        ("contention_strategy", "defer"),
+    )
+    conn.execute(
+        "INSERT INTO settings(key, value) VALUES (?,?)",
+        ("policy_bag_timeout_sec", "30"),
+    )
+    conn.execute(
         "INSERT INTO events(kind, ref, detail, at) VALUES (?,?,?,?)",
         ("种子", "系统", "舱隙底座初始化", ts),
     )

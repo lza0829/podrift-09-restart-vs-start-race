@@ -2,12 +2,16 @@ from __future__ import annotations
 import sqlite3
 from contextlib import contextmanager
 from app.config import DB_PATH
+from app.services.contention import ensure_contention_schema
 
 
 def connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False, timeout=30)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    # WAL + 立即式事务：对砸时在库层串行化，配合 BEGIN IMMEDIATE 消除脏写
+    conn.execute("PRAGMA journal_mode = WAL")
+    conn.execute("PRAGMA busy_timeout = 30000")
     return conn
 
 
@@ -15,6 +19,8 @@ def connect() -> sqlite3.Connection:
 def db():
     conn = connect()
     try:
+        # 写事务一律立即拿写锁，两路对砸到库层排队，结局靠 op_log 序号可重放
+        conn.execute("BEGIN IMMEDIATE")
         yield conn
         conn.commit()
     except Exception:
@@ -89,3 +95,4 @@ def init_schema(conn: sqlite3.Connection) -> None:
         );
         """
     )
+    ensure_contention_schema(conn)

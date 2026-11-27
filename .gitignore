@@ -1,0 +1,14 @@
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Node / 前端构建
+frontend/node_modules/
+frontend/dist/
+
+# 运行时数据库
+data/
+*.db
+*.db-wal
+*.db-shm
